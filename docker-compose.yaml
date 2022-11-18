@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  web:
+    image: passport
+    container_name: passport
+    environment:
+    - APACHE_RUN_USER=#1000
+    build:
+      context: .
+      args:
+        progress: plain
+    ports:
+    - 80:80
+    networks:
+      - app-passport-network
+  db:
+   image: mysql:5.7
+   restart: always
+   environment:
+     MYSQL_DATABASE: 'db'
+     MYSQL_USER: 'rootcloud2'
+     MYSQL_PASSWORD: 'rootcloud12345'
+     MYSQL_ROOT_PASSWORD: 'root1234'
+   ports:
+   - '3306:3306'
+   networks:
+     - app-passport-network
+   volumes:
+     - mysql-data-passport:/var/lib/mysql
+
+networks:
+  app-passport-network:
+    driver: bridge
+
+volumes:
+  mysql-data-passport:
